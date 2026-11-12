@@ -1,0 +1,24 @@
+# Secrets and local state: never commit
+.env
+.env.*
+!.env.example
+backend/.dev_db_uri
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs and OS junk
+*.log
+.DS_Store
+Thumbs.db

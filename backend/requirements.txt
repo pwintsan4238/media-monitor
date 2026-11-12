@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2
+psycopg[binary]
+alembic
+pydantic-settings
+pyjwt
+bcrypt
+python-multipart
+httpx
+feedparser
+trafilatura
+beautifulsoup4
+lxml
+apscheduler
+pytest
+truststore
