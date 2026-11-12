@@ -12,6 +12,7 @@ from . import auth
 from .admin import router as admin_router
 from .config import settings
 from .db import engine, get_db
+from .export import router as export_router
 from .models import Article, CrawlRun, Source
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -45,6 +46,7 @@ app.add_middleware(
 
 
 app.include_router(admin_router)
+app.include_router(export_router)
 
 
 class LoginIn(BaseModel):
