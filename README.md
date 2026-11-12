@@ -21,6 +21,40 @@ The whole app is login-gated.
 Until Phase 4 the search box is a placeholder. What works today: sign in, manage sources, test a source,
 crawl it, and see how many articles were stored.
 
+## Google Sheet mode: no server, no hosting
+
+The same crawler can run free on a schedule in **GitHub Actions** and write new articles into a **Google Sheet**
+that you search and filter. Nothing needs to be hosted. The Sheet gets three tabs:
+
+* **Articles**: one row per article (title, source, date, link, author, category, excerpt, full text, ...).
+* **Search**: type a word or phrase in cell `B1` and the matching articles appear below. It matches titles,
+  excerpts and full text with substring matching, so Burmese works. Leave it blank to see the latest.
+* **Status**: one line per source from the last run, including any source that failed or was blocked.
+
+Setup (about 10 minutes, once):
+
+1. Create an empty Google Sheet. Copy its ID: the long string in its URL between `/d/` and `/edit`.
+2. In the [Google Cloud console](https://console.cloud.google.com/): create a project, enable the
+   **Google Sheets API**, then create a **service account** and download a **JSON key** for it.
+3. Open the Sheet, press **Share**, and add the service account's email (the `client_email` in the key file) as **Editor**.
+4. In this GitHub repo go to **Settings > Secrets and variables > Actions** and add two secrets:
+   `SHEET_ID` (the ID from step 1) and `GOOGLE_SERVICE_ACCOUNT_JSON` (the full contents of the key file).
+   Or with the GitHub CLI: `gh secret set GOOGLE_SERVICE_ACCOUNT_JSON < key.json`.
+5. Open the **Actions** tab, choose **Collect articles into Google Sheet**, and press **Run workflow**.
+   After that it runs by itself every 3 hours.
+
+Try it without any Google setup: `cd backend && python -m app.sheet_sync --dry-run` crawls the real sites and
+prints what it would add, writing nothing.
+
+Things to know:
+
+* Rows are append-only: an article that is edited after it was collected is not updated in the Sheet.
+* Large sites fill in over several runs (about 40 article pages per source per run), newest first.
+* GitHub's servers can be blocked by some sites; the **Status** tab says so rather than pretending a source is monitored.
+* GitHub pauses scheduled workflows on repositories with no activity for 60 days; re-enable them in the Actions tab.
+* Keep the Sheet **private**. It holds publishers' article text, which you should not redistribute.
+* The login, Admin page, search page and press-brief features belong to the full web app below, which needs a server.
+
 ## How collection works
 
 1. **Discover** article URLs per source: RSS first, then sitemap (per-source tuning in `scrape_config`).
