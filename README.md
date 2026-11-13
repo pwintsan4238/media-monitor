@@ -6,6 +6,13 @@ It is not a general web search engine. Built for Burmese (Myanmar Unicode) and E
 
 The whole app is login-gated.
 
+## Live
+
+**Live data: [Media Watch Google Sheet](https://docs.google.com/spreadsheets/d/110geM0W7RdEbl-mSSk5knWPD3kMoZZqinT06kkchvkI/edit?usp=sharing)**
+(Articles, Search and Status tabs; refreshed every 3 hours by GitHub Actions; type keywords in cell `B1` of the Search tab).
+
+There is no hosted web app: the login, Admin page and press briefs need a server and are not deployed.
+
 ## Status
 
 | Phase | Feature | State |
@@ -52,7 +59,11 @@ Things to know:
 * Large sites fill in over several runs (about 40 article pages per source per run), newest first.
 * GitHub's servers can be blocked by some sites; the **Status** tab says so rather than pretending a source is monitored.
 * GitHub pauses scheduled workflows on repositories with no activity for 60 days; re-enable them in the Actions tab.
-* Keep the Sheet **private**. It holds publishers' article text, which you should not redistribute.
+* The Sheet holds publishers' article text. Sharing it publicly means redistributing that text, so check each
+  publisher's terms; set the Sheet to Restricted in Google if you want to limit who can read it.
+* In the first run, two sources (Shwe Phee Myay, Dawei Watch) refused GitHub's servers with HTTP 403. The
+  collector reports this on the Status tab and does not try to get around it. They do work from a home connection
+  (`python -m app.sheet_sync` on your own computer).
 * The login, Admin page, search page and press-brief features belong to the full web app below, which needs a server.
 
 ## How collection works
